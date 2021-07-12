@@ -20,13 +20,21 @@
   gap: 200px;
 }
 
-.card-container{
-  margin:0;
-  text-align:center;
+.delete-button {
+  height: 50px;
+  width: 50px;
+  position: absolute;
+  margin-top: -50px;
+  margin-left: 50px;
+}
+
+.card-container {
+  margin: 0;
+  text-align: center;
 }
 
 .card {
-  margin:0;
+  margin: 0;
   height: 264px;
   width: 211px;
   background-image: url('images/minecraft-book.png');
@@ -34,8 +42,8 @@
   background-size: 211px 264px;
 }
 
-.card-container:hover{
-  transform:scale(1.1);
+.card-container:hover {
+  transform: scale(1.1);
 }
 
 @media (max-width:650px) {
@@ -79,13 +87,13 @@
   background-size: contain;
   display: grid;
   grid-template-rows: 5fr 1fr;
-  padding-top:50px;
+  padding-top: 50px;
   padding-left: 60px;
   padding-right: 60px;
 }
 
-.form-content{
-  display:flex;
+.form-content {
+  display: flex;
   flex-direction: column;
   justify-content: space-around;
 }
@@ -96,16 +104,16 @@
   flex-direction: column;
 }
 
-.form-button-group{
-  display:grid;
+.form-button-group {
+  display: grid;
   grid-template-columns: 1fr 1fr;
-  margin-top:100px;
-  margin-bottom:-60px;
+  margin-top: 100px;
+  margin-bottom: -60px;
 }
 
-.form-button{
+.form-button {
   font-size: 24px;
-  color:white;
-  background:rgba(110,110,110,255);
+  color: white;
+  background: rgba(110, 110, 110, 255);
   border-top: #bdbdbf 2px solid;
 }

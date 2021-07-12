@@ -15,30 +15,53 @@ function Book(title, author, pages, bookmark) {
   this.bookmark = bookmark;
 }
 
-Book.prototype.createCard = function(book) {
+Book.prototype.deleteBook = function(cardContainer){
+  libraryContainer.removeChild(cardContainer);
+};
+
+
+Book.prototype.createCard = function() {
+  // console.log('this:', this);
+  let book = this;
   // console.log("in createCard()");
   let cardContainer = document.createElement('div');
   cardContainer.classList.add('card-container');
+  let deleteButton = document.createElement('img');
+  deleteButton.src = "images/trash-can.png";
+  deleteButton.classList.add('delete-button');
+  deleteButton.addEventListener('click', function(){
+    book.deleteBook(cardContainer);
+    // actually delete the book object from the mylibrary array
+    mylibrary = mylibrary.filter(element => element!=book);
+    // console.log("after delete: ", mylibrary);
+  });
   // append the number of pages of the book and the bookmark to the cardContainer
   let pagesText = document.createElement('p');
   pagesText.innerHTML = `${book.bookmark} / ${book.pages}`;
   pagesText.style.cssText = 'color:white; font-size:24px;';
+  // if user has read the whole book make the text green
+  if (book.bookmark == book.pages) {
+    pagesText.style.color = 'rgb(101, 233, 85)';
+  }
   // make the actual card
   let card = document.createElement("div");
   card.classList.add("card");
-  card.innerHTML = "<h1 style = 'padding:10px 30px 10px; position:absolute; width:151px;'>" + this.title + "</h1>";
+  card.innerHTML = "<h1 style = 'padding:10px 30px 10px; position:absolute; width:151px;'>" + book.title + "</h1>";
   card.addEventListener('click', function() {
     popupEditBook(book, card, pagesText);
   });
+  // append everything to the card container
+  cardContainer.appendChild(deleteButton);
   cardContainer.appendChild(card);
   cardContainer.appendChild(pagesText);
 
   libraryContainer.insertBefore(cardContainer, addBookButton);
-}
+};
 
 Book.prototype.addBookToLibrary = function() {
   mylibrary.push(this);
-  this.createCard(this);
+  // console.log("after add: ", mylibrary);
+  this.createCard();
 };
 
 function createForm() {
@@ -129,10 +152,10 @@ function intitializeNewBookPopup() {
     let newBook = new Book(form.querySelector('#bookName').value, form.querySelector('#bookAuthor').value, form.querySelector('#bookPages').value, form.querySelector('#bookBookmark').value);
     newBook.addBookToLibrary();
     // clear all the text boxes fo rnext time we create a book since we reuse the same form to save resources
-    form.querySelector('#bookName').value='';
-    form.querySelector('#bookAuthor').value='';
-    form.querySelector('#bookPages').value='';
-    form.querySelector('#bookBookmark').value='';
+    form.querySelector('#bookName').value = '';
+    form.querySelector('#bookAuthor').value = '';
+    form.querySelector('#bookPages').value = '';
+    form.querySelector('#bookBookmark').value = '';
 
     libraryContainer.removeChild(newBookPopup);
   });
@@ -178,6 +201,12 @@ function showEditBookPopup(book, card, pagesText) {
     // TODO: now we want to show it on the card
     card.innerHTML = "<h1 style = 'padding:10px 30px 10px; position:absolute; width:151px;'>" + book.title + "</h1>";
     pagesText.innerHTML = `${book.bookmark} / ${book.pages}`;
+    // if user has read the whole book make the text green
+    if (book.bookmark == book.pages) {
+      pagesText.style.color = 'rgb(101, 233, 85)';
+    } else {
+      pagesText.style.color = 'white';
+    }
     libraryContainer.removeChild(editBookPopup);
   });
 
