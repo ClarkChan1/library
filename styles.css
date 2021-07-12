@@ -1,0 +1,111 @@
+.main-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: black;
+  background-image: url('images/minecraft-library.png');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  font-family: 'VT323', monospace;
+  padding: 10em;
+  overflow: auto;
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 200px;
+}
+
+.card-container{
+  margin:0;
+  text-align:center;
+}
+
+.card {
+  margin:0;
+  height: 264px;
+  width: 211px;
+  background-image: url('images/minecraft-book.png');
+  background-repeat: no-repeat;
+  background-size: 211px 264px;
+}
+
+.card-container:hover{
+  transform:scale(1.1);
+}
+
+@media (max-width:650px) {
+  .main-container {
+    padding: 5em;
+  }
+
+  .new-book-form {
+    transform: scale(.7);
+  }
+}
+
+.add-book-button {
+  text-align: center;
+  font-size: 60px;
+  height: 264px;
+  width: 211px;
+  background-color: white;
+  border-radius: 10px;
+  opacity: .5;
+  transition: opacity .5s ease, color .5s ease;
+}
+
+.add-book-button:hover {
+  opacity: .8;
+  color: green;
+}
+
+.new-book-popup {}
+
+.new-book-form {
+  position: fixed;
+  height: 712px;
+  width: 476px;
+  top: 50%;
+  left: 50%;
+  margin-top: -356px;
+  margin-left: -288px;
+  background-image: url('images/minecraft-new-book.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  display: grid;
+  grid-template-rows: 5fr 1fr;
+  padding-top:50px;
+  padding-left: 60px;
+  padding-right: 60px;
+}
+
+.form-content{
+  display:flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.form-element-container {
+  font-size: 26px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-button-group{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  margin-top:100px;
+  margin-bottom:-60px;
+}
+
+.form-button{
+  font-size: 24px;
+  color:white;
+  background:rgba(110,110,110,255);
+  border-top: #bdbdbf 2px solid;
+}
