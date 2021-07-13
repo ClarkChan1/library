@@ -165,7 +165,6 @@ function intitializeNewBookPopup() {
   submitButton.addEventListener('click', function() {
     // collect the data from the text fields and make a new book obejct and add it to the library
     let newBook = new Book(form.querySelector('#bookName').value, form.querySelector('#bookAuthor').value, form.querySelector('#bookPages').value, form.querySelector('#bookBookmark').value);
-    console.log(newBook);
     newBook.addBookToLibrary();
     saveData();
     // clear all the text boxes fo rnext time we create a book since we reuse the same form to save resources
@@ -260,12 +259,10 @@ function loadData() {
   for (let a = 0; a < myLibrary.length; a++) {
     myLibrary[a] = new Book(myLibrary[a].title, myLibrary[a].author, myLibrary[a].pages, myLibrary[a].bookmark);
   }
-  console.log(myLibrary);
   displayData();
 }
 
 function saveData() {
-  console.log("myLibrary: ", myLibrary);
   localStorage.setItem('myLibrary', JSON.stringify(myLibrary));
 }
 
