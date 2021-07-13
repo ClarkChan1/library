@@ -15,7 +15,6 @@ Book.prototype.deleteBook = function(cardContainer) {
   libraryContainer.removeChild(cardContainer);
   // actually delete the book object from the myLibrary array
   myLibrary = myLibrary.filter(element => element != this);
-  saveData();
 };
 
 function changePages(pagesText, book) {
@@ -47,6 +46,7 @@ Book.prototype.createCard = function() {
   completeButton.addEventListener('click', function() {
     book.bookmark = book.pages;
     changePages(pagesText, book);
+    saveData();
   });
 
   let deleteButton = document.createElement('img');
@@ -54,6 +54,7 @@ Book.prototype.createCard = function() {
   deleteButton.classList.add('delete-button');
   deleteButton.addEventListener('click', function() {
     book.deleteBook(cardContainer);
+    saveData();
   });
 
   // make the actual card
