@@ -1,11 +1,7 @@
-let mylibrary = [];
+let myLibrary = [];
 let libraryContainer = document.querySelector(".grid");
 let addBookButton = document.querySelector(".add-book-button");
 let newBookPopup;
-
-intitializeNewBookPopup();
-// putDummyBooks();
-addListenerAddBook();
 
 // constructor for the book
 function Book(title, author, pages, bookmark) {
@@ -15,10 +11,24 @@ function Book(title, author, pages, bookmark) {
   this.bookmark = bookmark;
 }
 
-Book.prototype.deleteBook = function(cardContainer){
+Book.prototype.deleteBook = function(cardContainer) {
   libraryContainer.removeChild(cardContainer);
+  // actually delete the book object from the myLibrary array
+  myLibrary = myLibrary.filter(element => element != this);
+  saveData();
 };
 
+function changePages(pagesText, book) {
+  pagesText.innerHTML = `${book.bookmark} / ${book.pages}`;
+  pagesText.style.cssText = 'font-size:24px;';
+  // if user has read the whole book make the text green
+  if (book.bookmark == book.pages) {
+    pagesText.style.color = 'rgb(101, 233, 85)';
+  } else {
+    pagesText.style.color = 'white';
+  }
+
+}
 
 Book.prototype.createCard = function() {
   // console.log('this:', this);
@@ -26,23 +36,26 @@ Book.prototype.createCard = function() {
   // console.log("in createCard()");
   let cardContainer = document.createElement('div');
   cardContainer.classList.add('card-container');
+
+  // append the number of pages of the book and the bookmark to the cardContainer
+  let pagesText = document.createElement('p');
+  changePages(pagesText, book);
+
+  let completeButton = document.createElement('img');
+  completeButton.src = "images/check-mark.png";
+  completeButton.classList.add('complete-button');
+  completeButton.addEventListener('click', function() {
+    book.bookmark = book.pages;
+    changePages(pagesText, book);
+  });
+
   let deleteButton = document.createElement('img');
   deleteButton.src = "images/trash-can.png";
   deleteButton.classList.add('delete-button');
-  deleteButton.addEventListener('click', function(){
+  deleteButton.addEventListener('click', function() {
     book.deleteBook(cardContainer);
-    // actually delete the book object from the mylibrary array
-    mylibrary = mylibrary.filter(element => element!=book);
-    // console.log("after delete: ", mylibrary);
   });
-  // append the number of pages of the book and the bookmark to the cardContainer
-  let pagesText = document.createElement('p');
-  pagesText.innerHTML = `${book.bookmark} / ${book.pages}`;
-  pagesText.style.cssText = 'color:white; font-size:24px;';
-  // if user has read the whole book make the text green
-  if (book.bookmark == book.pages) {
-    pagesText.style.color = 'rgb(101, 233, 85)';
-  }
+
   // make the actual card
   let card = document.createElement("div");
   card.classList.add("card");
@@ -51,6 +64,7 @@ Book.prototype.createCard = function() {
     popupEditBook(book, card, pagesText);
   });
   // append everything to the card container
+  cardContainer.appendChild(completeButton);
   cardContainer.appendChild(deleteButton);
   cardContainer.appendChild(card);
   cardContainer.appendChild(pagesText);
@@ -59,8 +73,8 @@ Book.prototype.createCard = function() {
 };
 
 Book.prototype.addBookToLibrary = function() {
-  mylibrary.push(this);
-  // console.log("after add: ", mylibrary);
+  myLibrary.push(this);
+  // console.log("after add: ", myLibrary);
   this.createCard();
 };
 
@@ -150,7 +164,9 @@ function intitializeNewBookPopup() {
   submitButton.addEventListener('click', function() {
     // collect the data from the text fields and make a new book obejct and add it to the library
     let newBook = new Book(form.querySelector('#bookName').value, form.querySelector('#bookAuthor').value, form.querySelector('#bookPages').value, form.querySelector('#bookBookmark').value);
+    console.log(newBook);
     newBook.addBookToLibrary();
+    saveData();
     // clear all the text boxes fo rnext time we create a book since we reuse the same form to save resources
     form.querySelector('#bookName').value = '';
     form.querySelector('#bookAuthor').value = '';
@@ -200,13 +216,8 @@ function showEditBookPopup(book, card, pagesText) {
     // console.log(book.title, book.author, book.pages, book.bookmark);
     // TODO: now we want to show it on the card
     card.innerHTML = "<h1 style = 'padding:10px 30px 10px; position:absolute; width:151px;'>" + book.title + "</h1>";
-    pagesText.innerHTML = `${book.bookmark} / ${book.pages}`;
-    // if user has read the whole book make the text green
-    if (book.bookmark == book.pages) {
-      pagesText.style.color = 'rgb(101, 233, 85)';
-    } else {
-      pagesText.style.color = 'white';
-    }
+    changePages(pagesText, book);
+    saveData();
     libraryContainer.removeChild(editBookPopup);
   });
 
@@ -221,13 +232,15 @@ function popupEditBook(book, card, pagesText) {
   libraryContainer.appendChild(showEditBookPopup(book, card, pagesText));
 }
 
-function putDummyBooks() {
-  // const nameofwind = new Book("The Name of the Wind", "Patrick Rothfuss", 662, 630);
-  // nameofwind.addBookToLibrary();
-  for (var a = 0; a < 5; a++) {
-    let dummy = new Book("The Name of the Wind", "Patrick Rothfuss", 662, 630);
-    dummy.addBookToLibrary();
+function displayData() {
+  console.log(myLibrary.length);
+  for (var a = 0; a < myLibrary.length; a++) {
+    myLibrary[a].createCard();
   }
+  // let dummy = new Book("The Name of the Wind", "Patrick Rothfuss", 662, 630);
+  // dummy.addBookToLibrary();
+  // console.log(myLibrary[0]);
+  // console.log(dummy);
 }
 
 function popupNewBook() {
@@ -237,3 +250,25 @@ function popupNewBook() {
 function addListenerAddBook() {
   addBookButton.addEventListener('click', popupNewBook);
 }
+
+function loadData() {
+  if (!localStorage.getItem('myLibrary')) {
+    localStorage.setItem('myLibrary', JSON.stringify(myLibrary));
+  }
+  myLibrary = JSON.parse(localStorage.getItem('myLibrary'));
+  for (let a = 0; a < myLibrary.length; a++) {
+    myLibrary[a] = new Book(myLibrary[a].title, myLibrary[a].author, myLibrary[a].pages, myLibrary[a].bookmark);
+  }
+  console.log(myLibrary);
+  displayData();
+}
+
+function saveData() {
+  console.log("myLibrary: ", myLibrary);
+  localStorage.setItem('myLibrary', JSON.stringify(myLibrary));
+}
+
+// make all function calls after all functions have been declared and defined as good practice just in case hoisting is not in effect
+loadData();
+intitializeNewBookPopup();
+addListenerAddBook();

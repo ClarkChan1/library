@@ -20,6 +20,14 @@
   gap: 200px;
 }
 
+.complete-button{
+  height: 50px;
+  width: 50px;
+  position: absolute;
+  margin-top: -50px;
+  margin-left: 0px;
+}
+
 .delete-button {
   height: 50px;
   width: 50px;
